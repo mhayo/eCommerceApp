@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -36,7 +37,6 @@ public class CartControllerTest {
 
         User user = userController.createUser(request).getBody();
 
-
         ModifyCartRequest request2 = new ModifyCartRequest();
         request2.setUsername("UserCartTest");
         request2.setItemId(1);
@@ -48,11 +48,11 @@ public class CartControllerTest {
 
         // Test for unsuccessful addToCart()
 
-
         ModifyCartRequest request3 = new ModifyCartRequest();
         request3.setUsername("Unknown");
         request3.setQuantity(2);
         request3.setItemId(1);
+
         // Check http-status 404
         Assert.assertEquals(404, cartController.addTocart(request3).getStatusCodeValue());
 
@@ -96,6 +96,17 @@ public class CartControllerTest {
         Cart cart2 = cartController.removeFromcart(request3).getBody();
 
         Assert.assertEquals(1, user != null ? user.getCart().getItems().size() : 0);
+
+        // negative test
+
+        ModifyCartRequest request4 = new ModifyCartRequest();
+        request3.setUsername("Unknown");
+        request3.setItemId(1);
+        request3.setQuantity(1);
+
+        ResponseEntity<Cart> unknown = cartController.removeFromcart(request4);
+
+        Assert.assertEquals(404, unknown.getStatusCodeValue());
 
     }
 

@@ -3,7 +3,6 @@ package com.example.demo.controllers;
 
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.repositories.ItemRepository;
-import com.example.demo.util.UtilsTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +23,6 @@ public class ItemControllerTest {
     private ItemRepository itemRepository;
     @Autowired
     private ItemController itemController;
-
-
     @Test
     @Transactional
     public void getItemsTest(){
@@ -34,6 +31,7 @@ public class ItemControllerTest {
 
         Assert.assertNotNull(items);
         Assert.assertEquals(200,items.getStatusCodeValue());
+
         // Compare with result from itemRepository
         Assert.assertEquals(itemRepository.findAll().size(), Objects.requireNonNull(items.getBody()).size());
 
@@ -47,10 +45,18 @@ public class ItemControllerTest {
 
         Item itemRef = itemRepository.getOne(1L);
 
-        Assert.assertTrue(UtilsTest.isEqual(itemId,itemRef));
+       // testing overwritten hashcode method
+        Assert.assertTrue(itemId.hashCode() == itemRef.hashCode());
+
+        // testing overwritten equals method
+        Assert.assertTrue(itemId.equals(itemRef));
+
+        // negative test
+
+        ResponseEntity<Item> unknown = itemController.getItemById(5l);
+        Assert.assertEquals(404,unknown.getStatusCodeValue());
 
     }
-
 
     @Test
     @Transactional
@@ -60,7 +66,12 @@ public class ItemControllerTest {
 
         List <Item> itemsRef = itemRepository.findByName("Square Widget");
 
-        Assert.assertTrue(UtilsTest.isEqual(items.get(0),itemsRef.get(0)));
+        Assert.assertTrue(items.get(0).equals(itemsRef.get(0)));
+
+        // negative test
+
+        ResponseEntity<List<Item>> unknown = itemController.getItemsByName("Unknown Item");
+        Assert.assertEquals(404,unknown.getStatusCodeValue());
     }
 
 }

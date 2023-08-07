@@ -76,6 +76,13 @@ public class OrderControllerTest {
         Assert.assertEquals(2,order.getBody().getItems().size());
         Assert.assertEquals(BigDecimal.valueOf(10),order.getBody().getTotal());
 
+        // negative test
+
+        ResponseEntity<UserOrder> invalidOrder = orderController.submit( "Invalid");
+        Assert.assertEquals(404,invalidOrder.getStatusCodeValue());
+
+
+
     }
 
     @Test
@@ -88,6 +95,11 @@ public class OrderControllerTest {
         Assert.assertNotNull(userOrders);
         Assert.assertEquals(200,userOrders.getStatusCodeValue());
         Assert.assertEquals(1,userOrders.getBody().size());
+
+        // negative Test
+        ResponseEntity<UserOrder> invalidOrder = orderController.submit("Invalid");
+        Assert.assertEquals(404,invalidOrder.getStatusCodeValue());
+
 
     }
 

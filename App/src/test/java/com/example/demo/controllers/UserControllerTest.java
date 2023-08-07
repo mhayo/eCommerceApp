@@ -86,6 +86,12 @@ public class UserControllerTest {
         User user1 = userController.findById(1L).getBody();
         Assert.assertEquals(user.getId(),user1.getId());
         Assert.assertEquals(user.getUsername(),user1.getUsername());
+
+
+        // negativ test
+        ResponseEntity<User> unknownUser = userController.findById(2L);
+        Assert.assertEquals(404,unknownUser.getStatusCodeValue());
+
     }
 @Test
 @Transactional
@@ -100,6 +106,7 @@ public class UserControllerTest {
         Assert.assertNotNull(user1);
         Assert.assertEquals(user.getUsername(),user1.getUsername());
 
+        // negative test
         User user2 = userController.findByUserName("Unknown").getBody();
         Assert.assertNull(user2);
 
