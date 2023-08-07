@@ -3,24 +3,23 @@ pipeline {
 
     stages {
         stage('Build') {
-            dir('eCommerceApp/App')  {
+            steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/feature']], userRemoteConfigs: [[url: 'https://github.com/mhayo/eCommerceApp.git']]])
               //  sh './mvnw clean package'
-                sh 'mvn clean package'
+                sh 'cd App && mvn clean package'
             }
         }
 
         stage('Test') {
-            dir('eCommerceApp/App')  {
+           steps {
              //   sh './mvnw test'
-                 sh 'mvn test'
+                 sh 'cd App && mvn test'
             }
         }
 
         stage('Deploy') {
-            dir('eCommerceApp/App')  {
-                sh 'cp target/eCommerceApp.jar /path/to/deployment/location'
-            }
+            steps  {
+                    sh 'cd App && cp target/eCommerceApp.war /usr/local/tomcat/webapps'            }
         }
     }
 
