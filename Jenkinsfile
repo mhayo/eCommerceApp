@@ -1,10 +1,37 @@
 pipeline {
-    agent { docker { image 'maven:3.9.3-eclipse-temurin-17-alpine' } }
+    agent any
+
     stages {
-        stage('build') {
+        stage('Build') {
             steps {
-                sh 'mvn --version'
+                checkout([$class: 'GitSCM', branches: [[name: '*/feature']], userRemoteConfigs: [[url: 'https://github.com/mhayo/eCommerceApp.git']]])
+              //  sh './mvnw clean package'
+                sh 'mvn clean package'
             }
+        }
+
+        stage('Test') {
+            steps {
+             //   sh './mvnw test'
+                 sh 'mvn test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'cp target/eCommerceApp.jar /path/to/deployment/location'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Process successfully!!'
+            // Hier könntest du weitere Benachrichtigungen oder Integrationen hinzufügen
+        }
+
+        failure {
+            echo 'An error is occured'
         }
     }
 }
