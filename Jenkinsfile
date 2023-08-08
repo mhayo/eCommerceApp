@@ -7,20 +7,20 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/feature']], userRemoteConfigs: [[url: 'https://github.com/mhayo/eCommerceApp.git']]])
               //  sh './mvnw clean package'
               //  sh 'cd App && mvn clean package'
-                  sh 'cd App && sudo ./mvnw clean compile package -DskipTests=true'
+                  sh 'cd App && ./mvnw clean compile package -DskipTests=true'
             }
         }
 
         stage('Test') {
            steps {
              //   sh './mvnw test'
-                 sh 'cd App && sudo ./mvnw test'
+                 sh 'cd App && ./mvnw test'
             }
         }
 
         stage('Deploy') {
             steps  {
-                    sh 'cd App && sudo cp target/eCommerceApp.war /usr/local/tomcat/webapps'            }
+                    sh 'cd App && cp target/eCommerceApp.war /usr/local/tomcat/webapps'            }
         }
     }
 
