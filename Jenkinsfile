@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Build & Test') {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/feature']], userRemoteConfigs: [[url: 'https://github.com/mhayo/eCommerceApp.git']]])
               //  sh './mvnw clean package'
               //  sh 'cd App && mvn clean package'
-                  sh 'cd App && ./mvnw clean compile package'
+                  sh 'cd App && mvn compile package'
             }
         }
-
+/*
         stage('Test') {
            steps {
              //   sh './mvnw test'
@@ -22,7 +22,7 @@ pipeline {
             steps  {
                     sh 'cd App && cp target/eCommerceApp.war /usr/local/tomcat/webapps'            }
         }
-    }
+    }*/
 
     post {
         success {
