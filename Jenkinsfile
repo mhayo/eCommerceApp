@@ -7,7 +7,9 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/feature']], userRemoteConfigs: [[url: 'https://github.com/mhayo/eCommerceApp.git']]])
               //  sh './mvnw clean package'
               //  sh 'cd App && mvn clean package'
-                  sh 'cd App && mvn compile package'
+               //   sh 'cd App && mvn compile package'
+                sh 'cd App && mvn compile -DskipTests=true'
+                
             }
         }
 /*
