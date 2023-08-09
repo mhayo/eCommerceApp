@@ -21,8 +21,8 @@ pipeline {
         stage('Deploy') {
             steps  {
                     sh 'cd App && cp target/eCommerceApp.war /usr/local/tomcat/webapps'            }
-        }
-    }*/
+        }*/
+    }
 
     post {
         success {
