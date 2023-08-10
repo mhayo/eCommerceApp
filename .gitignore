@@ -1,3 +1,6 @@
+.idea/
+/starter_code/target/
+**/.idea
 *#
 *.iml
 *.ipr
